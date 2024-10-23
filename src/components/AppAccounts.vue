@@ -27,6 +27,7 @@
                 <th scope="col">Account Number</th>
                 <th scope="col">Account Balance</th>
                 <th scope="col">Account Currency</th>
+                <th scope="col">Account Country</th>
                 <th scope="col">Account Status</th>
                 <th scope="col">Actions</th>
               </tr>
@@ -37,6 +38,7 @@
                 <td>{{ account.account_number }}</td>
                 <td>{{ account.balance }}</td>
                 <td>{{ account.currency }}</td>
+                <td>{{ account.country }}</td>
                 <td>
                   <span
                     v-if="account.status == 'Active'"
@@ -111,6 +113,20 @@
             </b-form-input>
           </b-form-group>
 
+          <b-form-group
+            id="form-country-group"
+            label="Country:"
+            label-for="form-country-input"
+          >
+            <b-form-input
+              id="form-country-input"
+              type="text"
+              v-model="createAccountForm.country"
+              placeholder="Country"
+              required
+            ></b-form-input>
+          </b-form-group>
+
           <b-button type="submit" variant="outline-info">Submit</b-button>
         </b-form>
       </b-modal>
@@ -138,6 +154,25 @@
             >
             </b-form-input>
           </b-form-group>
+
+          <b-form-group>
+          id="form-edit-country-group"
+            label="Country:"
+            label-for="form-edit-country-input"
+          >
+          <b-form-input>
+              id="form-edit-country-input"
+                type="text"
+                v-model="editAccountForm.country"
+                placeholder="Country"
+                required
+              >
+              </b-form-input>
+            </b-form-group>
+
+
+
+
           <b-button type="submit" variant="outline-info">Update</b-button>
         </b-form>
       </b-modal>
@@ -156,10 +191,12 @@ export default {
       createAccountForm: {
         name: "",
         currency: "",
+        country: "",
       },
       editAccountForm: {
         id: "",
         name: "",
+        country: "",
       },
       showMessage: false,
       message: "",
@@ -257,6 +294,7 @@ export default {
     initForm() {
       this.createAccountForm.name = "";
       this.createAccountForm.currency = "";
+      this.createAccountForm.country = "";
       this.editAccountForm.id = "";
       this.editAccountForm.name = "";
     },
@@ -268,6 +306,7 @@ export default {
       const payload = {
         name: this.createAccountForm.name,
         currency: this.createAccountForm.currency,
+        country: this.createAccountForm.country
       };
       this.RESTcreateAccount(payload);
       this.initForm();
@@ -279,6 +318,8 @@ export default {
       this.$refs.editAccountModal.hide(); //hide the modal when submitted
       const payload = {
         name: this.editAccountForm.name,
+        country: this.editAccountForm.country,
+
       };
       this.RESTupdateAccount(payload, this.editAccountForm.id);
       this.initForm();
